@@ -30,7 +30,7 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get('http://localhost:5000/api/projects', config);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects`, config);
       setProjects(data);
       setLoading(false);
     } catch (error) {
@@ -43,7 +43,7 @@ const ProjectList = () => {
     if (user.role === 'Admin') {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('http://localhost:5000/api/auth/users', config);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/auth/users`, config);
         setUsers(data);
       } catch (error) {
         console.error(error);
@@ -60,7 +60,7 @@ const ProjectList = () => {
     e.preventDefault();
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.post('http://localhost:5000/api/projects', { name, description, members, tasks: initialTasks }, config);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/projects`, { name, description, members, tasks: initialTasks }, config);
       setShowCreate(false);
       setName('');
       setDescription('');

@@ -17,13 +17,13 @@ const ProjectDetail = () => {
   const fetchProjectData = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data: projData } = await axios.get(`http://localhost:5000/api/projects/${id}`, config);
+      const { data: projData } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects/${id}`, config);
       setProject(projData);
-      const { data: taskData } = await axios.get(`http://localhost:5000/api/projects/${id}/tasks`, config);
+      const { data: taskData } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects/${id}/tasks`, config);
       setTasks(taskData);
 
       if (user.role === 'Admin') {
-        const { data: usersData } = await axios.get('http://localhost:5000/api/auth/users', config);
+        const { data: usersData } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/auth/users`, config);
         setUsers(usersData);
       }
 
@@ -42,7 +42,7 @@ const ProjectDetail = () => {
     e.preventDefault();
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.post(`http://localhost:5000/api/projects/${id}/tasks`, newTask, config);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/projects/${id}/tasks`, newTask, config);
       setShowTaskForm(false);
       setNewTask({ title: '', description: '', status: 'To Do', priority: 'Medium', assignee: '', dueDate: '' });
       fetchProjectData();
@@ -56,7 +56,7 @@ const ProjectDetail = () => {
     const nextStatus = statuses[(statuses.indexOf(currentStatus) + 1) % statuses.length];
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, { status: nextStatus }, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`, { status: nextStatus }, config);
       fetchProjectData();
     } catch (error) {
       console.error(error);
@@ -67,7 +67,7 @@ const ProjectDetail = () => {
     if (window.confirm("Delete this task?")) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, config);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`, config);
         fetchProjectData();
       } catch (error) {
         alert('Could not delete task. ' + (error.response?.data?.message || ''));

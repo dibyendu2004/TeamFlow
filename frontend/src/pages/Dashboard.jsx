@@ -14,8 +14,8 @@ const Dashboard = () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
         const [projRes, taskRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/projects', config),
-          axios.get('http://localhost:5000/api/tasks/user/me', config)
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects`, config),
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/tasks/user/me`, config)
         ]);
         setProjects(projRes.data);
         setTasks(taskRes.data);
@@ -38,7 +38,7 @@ const Dashboard = () => {
     if (window.confirm("Are you sure you want to mark this project as completed?")) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put(`http://localhost:5000/api/projects/${projectId}`, { status: 'Completed' }, config);
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/projects/${projectId}`, { status: 'Completed' }, config);
         setProjects(projects.map(p => p._id === projectId ? { ...p, status: 'Completed' } : p));
       } catch (error) {
         alert('Error updating project status. ' + (error.response?.data?.message || ''));
